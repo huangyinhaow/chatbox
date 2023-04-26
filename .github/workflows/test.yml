@@ -27,7 +27,7 @@ jobs:
         run: |
           yarn build -- --target "aarch64-pc-windows-msvc"
           tree
-          rm -rf src-tauri/target/aarch64-pc-windows-msvc/release/deps
+          rmdir /s /q src-tauri/target/aarch64-pc-windows-msvc/release/deps
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
