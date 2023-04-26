@@ -19,6 +19,8 @@ jobs:
             platform: ubuntu-20.04
           - target: x86_64-pc-windows-msvc
             platform: windows-latest
+          - target: aarch64-pc-windows-msvc
+            platform: windows-latest
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -35,6 +37,14 @@ jobs:
 
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
+      - name: setup target aarch64-pc-windows-msvc
+        if: matrix.target == 'aarch64-pc-windows-msvc'
+        run: rustup target add i686-pc-windows-msvc
+      - name: setup msvc aarch64
+        if: matrix.target == 'aarch64-pc-windows-msvc'
+        uses: ilammy/msvc-dev-cmd@v1.12.1
+        with:
+          arch: amd64_arm64
 
       - name: Rust cache
         uses: swatinem/rust-cache@v2
