@@ -10,11 +10,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 16
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
       - name: setup target aarch64-pc-windows-msvc
-        run: rustup target add aarch64-pc-windows-msvc
+        run: |
+          rustup target add i686-pc-windows-msvc
+          rustup target add aarch64-pc-windows-msvc
       - name: Setup msvc aarch64
         uses: ilammy/msvc-dev-cmd@v1.12.1
         with:
@@ -23,9 +25,9 @@ jobs:
         run: yarn install
       - name: Build
         run: |
-          yarn build -- --target 'aarch64-pc-windows-msvc'
+          yarn build -- --target "aarch64-pc-windows-msvc"
           tree
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          path: src-tauri
+          path: src-tauri/target/aarch64-pc-windows-msvc/release/*.msi
