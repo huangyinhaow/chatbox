@@ -1,0 +1,31 @@
+name: 'test'
+on:
+  workflow_dispatch:
+jobs:
+  publish-tauri:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: setup target aarch64-pc-windows-msvc
+        run: rustup target add i686-pc-windows-msvc
+      - name: Setup msvc aarch64
+        uses: ilammy/msvc-dev-cmd@v1.12.1
+        with:
+          arch: amd64_arm64
+      - name: install frontend dependencies
+        run: yarn install
+      - name: Build
+        run: |
+          yarn build -- --target 'aarch64-pc-windows-msvc'
+          tree
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          path: src-tauri
